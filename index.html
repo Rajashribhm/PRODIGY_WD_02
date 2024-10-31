@@ -1,0 +1,649 @@
+<!DOCTYPE html><html><head>http://127.0.0.1:3000/Focusstopwatch/index.html
+<meta charset="utf-8">
+
+<title>Stopwatch </title>
+
+<meta name="description" content="Stopwatch &amp; Stopwatch.  simple &amp; easy to use.">
+<meta name="keywords" content="stopwatch_timer">
+
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" type="text/css" href="2015_menu.css">
+
+<!--<link rel="stylesheet" type="text/css" href="--><!--css/boutons.css">-->
+<link rel="stylesheet" type="text/css" href="jquery-ui-1.10.3.custom.min.js">
+
+<!--general-->
+	<script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="jquery-ui-1.10.3.custom.min.js"></script>
+	
+				<link rel="stylesheet" type="text/css" href="css/superslides.css">
+			<script type="text/javascript" src="jquery.superslides.min.js"></script>
+					
+		
+<!-- image pop-up + gallery http://fancybox.net/ -->
+	<link rel="stylesheet" href="jquery.fancybox.css" type="text/css" media="screen">
+	<script type="text/javascript" src="jquery.fancybox.js"></script>
+
+
+    <script>
+        // (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        //     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        //     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        // })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        //
+        // ga('create', 'UA-39144672-11', 'auto');
+        // ga('send', 'pageview');
+    </script>
+
+<script>
+	$(document).ready(function (){
+
+		// hide the "buy real timer" popup after 10 seconds
+		$('#getplugin').delay(12000).fadeOut();
+
+	});
+
+// *** document ready
+$(document).ready(function (){
+
+    // fadein background image
+   // $('body.bgImage').animate({ opacity: 1 }, { duration: 1000 });
+
+    // click on "quick link to this countdown" button
+    $("#share_countdown").click(function() {
+        var url = $('#share_countdown').attr("href");
+        $('#share_popup_url').attr("href", url).text(url);
+
+        // show popup
+        $("#overlaynoir").fadeIn();
+        $("#share_popup").fadeIn();
+        return false;
+    });
+
+	
+	// --- joel fnc - start  --------------------------------------	
+	
+	//Close Popups and Fade Layer
+	$('.closethis, #overlaybleu, #overlayvert, #overlayblanc, #overlayjaune, #overlaynoir').click(function() { //When clicking on the close or fade layer...
+	  	$("#overlaybleu, #overlayvert, #overlayblanc, #overlayjaune, #overlaynoir, #popemail, #popconsultation, #popnewsletter, #promopopup, #popsignup, #share_popup").fadeOut();
+	});
+	
+	// hide the "buy real timer" popup after 10 seconds
+	$('#buymessage').delay(12000).fadeOut();
+	// hide first message after "x" seconds
+	$('#txt, #socialbuttons').delay(60000).fadeOut();
+	
+	
+	// --- joel fnc - end  --------------------------------------
+	
+	var iFrequency = 300000; // expressed in miliseconds
+	var rndtimermessage = 0;
+	
+	// start
+	rndtimermessage = setInterval( showmessagernd, iFrequency );  // run
+	
+	
+	// show one in many messages
+	function showmessagernd() {
+		//console.log('xx')
+		// check how many random message we have
+		var nbtxt = 1;
+		var x = 0;
+		while ($('#txt'+nbtxt).length > 0) {
+			nbtxt++;
+			x++; if(x > 3){break;}
+		}
+		nbtxt--; //remove one
+			
+			// randomly choose one of the text message
+		var nbchosen = 1 + Math.floor(Math.random() * nbtxt);
+		var txttodisplay = $('#txt' + nbchosen).html();
+		//alert(nbchosen+","+nbtxt)
+		
+		// show/hide
+		var cur_slctor = $('#message_container');
+		if (cur_slctor.css('display') == 'none'){
+			
+			// put the chosen text in the proper div
+			$('#socialbuttons').css('display', 'inline-block');// show social button
+			$('#txt').html(txttodisplay);
+			
+			cur_slctor.fadeIn(500);
+		}
+		else {
+			cur_slctor.fadeOut(700);
+		}
+			
+	}
+	
+	 
+	// -- add jquery UI to radio buttons
+	$('#fnt_size_radio').add('#opt1_radio').add('#opt2_radio').add('#opt3_radio').add('#seconds_radio').add('#miliseconds_radio').add('#alarm_radio').buttonset();
+	
+	
+});
+// ========================================================
+// minify FIRST, then obfuscate: 
+// BEST: obfuscator: http://javascriptobfuscator.com/
+// ========================================================
+
+
+	
+// --- remove one of the saved time
+function removesavedtime(divcur) {
+	$(divcur).parent('div').slideUp(function() { $(divcur).parent('div').remove() });
+}
+
+
+// --- RESET timer or stopwatch - start ==========================================
+//custom after we RESET, do these actions 
+function afterreset(divid, exp_type) {
+  
+  var $divid = $(divid);
+  var curtxt = $(divid).html(); //alert(curtxt)
+
+	if (exp_type == 'stopwatch'){
+		$(divid).fadeOut(450, function(){ 
+			
+			//Stopwatch.resetStopwatch();
+			$(divid).text('00:00.00').fadeIn(650);
+			
+		});
+		//showing/hiding side buttons:
+       var sides_buttons=$('#stopwatch_reset_but').add('#stopwatch_save_but');
+       sides_buttons.stop().fadeOut(450);
+       
+       //changing button text:
+       $('#stopwatch_start_stop_but').text('Start');
+   }
+   
+   
+}
+// --- RESET timer or stopwatch - end ==========================================
+
+
+
+// *** document ready
+$(document).ready(function (){
+
+	// --- slides init
+	$('#slides').superslides({
+		inherit_width_from:$('.main_wrapper'),
+		pagination:false
+	});
+	
+});
+
+
+
+// *** MAIN STOPWATCH FNC ********************************************************
+
+
+
+
+/**
+ * stopwatch.js
+ *
+ * Copyright (c) 2024 Rajashri
+ *
+ * Use as you desire but i appreciate links as "thank you"!
+ * 
+*/
+// ========================================================
+// minify FIRST, then obfuscate: 
+// BEST: obfuscator: http://javascriptobfuscator.com/
+// ========================================================
+
+	
+
+// *** document ready
+$(document).ready(function (){
+
+	// --- stopwatch start/stop click:
+	$('#stopwatch_start_stop_but').click( function (){
+        $('.title-fade').fadeOut();
+
+        //start/stop timer:
+		var buttext = $(this).html();//alert(buttext)
+		if (buttext == 'Start') {
+			stopwatchjoel(1, 0);
+		}
+		else if (buttext == 'Pause'){
+			pausestopwatch(1);
+		}
+		else if (buttext == 'Resume'){
+			stopwatchjoel(1, 1);
+		}
+		
+		
+		//showing / hiding side buttons:
+		if ($(this).text() == 'Pause' || $(this).text() == 'Resume'){
+			var sides_buttons = $('#stopwatch_reset_but').add('#stopwatch_save_but');
+			if (sides_buttons.css('display') == 'none' && $(this).text() == 'Pause'){
+				sides_buttons.stop().fadeIn(450);
+			}
+			else{ 
+				sides_buttons.stop().fadeOut(450);
+			}
+		}
+		//changing button text:
+		if ($(this).text() != 'Resume' && $(this).text() != 'Start'){
+			$(this).text('Resume');
+		}
+		else {
+			$(this).text('Pause');
+			$('#stopwatch_save_but').text('Lap').fadeIn();
+		}
+		
+	});  
+	  
+	  
+	// --- stopwatch reset click:
+	$('#stopwatch_reset_but').click( function (){
+		afterreset("#stopwatch_time",'stopwatch');
+	});
+	  
+	  
+	// --- stopwatch save results button:
+	$('#stopwatch_save_but').click( function (){
+		
+		// count items & find next #
+		var nextnb = 1;
+		var temp = $('.saved_clear_all:last').html();//alert(temp)
+		if (temp != undefined) { 
+			temp = temp.split('-');
+			nextnb = parseInt(temp[0]) + 1; 
+		}
+		
+		// add new saved time item, hidden
+		$('#saved_times_container').append('<div class="trhover" style="display:none;"><div class="saved_clear_all">'+nextnb+' -  </div><div class="saved_time">' + $('#stopwatch_time').text() + '</div><div class="saved_clear_cur" onclick="removesavedtime(this);">X</div></div>');
+		// now show that item in a beautiful sliding motion
+		$('#saved_times_container div').slideDown();
+	
+	});
+	
+}); //end "$(document).ready"
+// ----------------------------------------------------------------------
+
+
+
+
+// --- ajoute "0" pour faire sur que jai toujours "00" ou "06" ou "34"
+function pad(number, length) {
+    var str = '' + number;
+    while (str.length < length) {str = '0' + str;}
+    return str;
+}
+
+
+// --- convert miliseconds to time
+function convertmiliseconds(miliseconds) {
+
+	var r = new Array();
+	
+	// totals for each time unite
+	//var ht = parseInt(miliseconds / 10);// total centiseconds
+	//s = parseInt(ht / 100);// total seconds
+	// we dont calculate until we are there, less CPU intensive
+	//if (miliseconds > 60000) {m = parseInt(miliseconds / 60000);} // total minutes
+	//if (miliseconds > 3600000) {h = parseInt(miliseconds / 3600000);} // hrs total
+	//if (miliseconds > 86400000) {d = parseInt(miliseconds / 86400000);} // hours in 24 hr day
+	
+	// totals for each time unit
+	ht = parseInt(miliseconds / 10);// total centiseconds
+	s = parseInt(ht / 100);// total seconds
+	// we dont calculate until we are there, less CPU intensive
+	if (miliseconds > 60000) {m = parseInt(miliseconds / 60000);} // total minutes
+	else{ m = 0;} /* else it means we dont have > 59 min, so set hour to zero */
+	if (miliseconds > 3600000) {h = parseInt(miliseconds / 3600000);} // hrs total
+	else{ h = 0;} /* else it means we dont have > 24 hrs, so set days to zero */
+	if (miliseconds > 86400000) {d = parseInt(miliseconds / 86400000);} // hours in 24 hr day
+	else{ d = 0;} /* else it means we dont have > 24 hrs, so set days to zero */
+	
+	
+	// 24hr formated total
+	r['h24'] = parseInt(h - parseInt(h / 24) * 24);
+	r['m60'] = parseInt(m - parseInt(m / 60) * 60);
+	r['s60'] = parseInt(s - parseInt(s / 60) * 60);
+	//if (BrowserDetect.browser != 'Firefox' && BrowserDetect.browser != 'Explorer') {
+		r['ht'] = (ht + '').slice(-2);
+	//}
+	// add "00" if needed
+	//if (d  > 0) {}
+	return r;
+}
+
+
+
+var timeouts = {};
+
+// --- timer demo function with normal/self-adjusting argument
+// action = start (0) or resume (1)
+function stopwatchjoel(whichdiv, action){
+
+	// variables
+	var speed = 45,
+		start = new Date().getTime(),
+		ht = 0, /*hundreth*/
+		s = 0, /*seconds*/
+		s60 = 0, /*seconds, max 59*/
+		m = 0, /*minutes*/
+		m60 = 0, /*minutes, max 59*/
+		h = 0, /*hours*/
+		h24 = 0, /*hours, max 23*/
+		d = 0, /*days*/
+		time = 0,
+		time2 = 0,
+		str = '';
+		
+	// what is the maximum width of a letter (0)
+		var widthdigit = $('#swcsec').width();//alert(widthdigit)
+		// update csec digit width so they don't "move" while counting down
+		$('#swcsec').width(widthdigit)
+		
+	// if we resume, then get milliseconds from hidden input field and substract from current time as new start
+		if (action == 1) { start = new Date().getTime() - $('#stimehidden').val(); }
+		
+		
+	// --- timer instance function
+	function instance() {
+	
+		// get miliseconds. getTime() = nb miliseconds since 1970
+			miliseconds = new Date().getTime() - start;
+		
+		// convert miliseconds to real time
+			 var t = convertmiliseconds(miliseconds);
+			
+			//alert(miliseconds+'_'+ht);
+			
+		// update the digits
+			time = (d > 0 ? d+" d " : "") + (t['h24'] > 0 ? pad(t['h24'], 2)+':' : "") + (t['m60'] > 0 ? pad(t['m60'], 2) : "00") + ":" + pad(t['s60'], 2);
+			//if (BrowserDetect.browser != 'Firefox' && BrowserDetect.browser != 'Explorer') {
+				//time2 = time + "." + pad(t['ht'], 2);
+			//}
+			// update time shown
+			$('#swtime').html(time);
+			$('#swcsec').html("." + pad(t['ht'], 2));
+			// update hidden milliseconds time, so if we pause, we can resume from there
+			$('#stimehidden').val(miliseconds);
+			//alert(miliseconds / 86400000 + ' _ ' +time2+'_'+start+'_'+miliseconds)
+		
+		// --- update browser TAB
+			window.document.title = time + "   ---------------------";
+		
+		timeouts[whichdiv] = window.setTimeout(function() { instance(); }, speed);
+	};
+	
+	//now kick everything off with the first timer instance
+	timeouts[whichdiv] = window.setTimeout(function() { instance(); }, speed);
+}
+
+
+
+// --- pause stopwatch
+function pausestopwatch(whichdiv){
+	// STOPS the form's timer, that's why we need to store the miliseconds in case we resume
+	window.clearTimeout(timeouts[whichdiv]);
+};</script>
+
+<script>
+// when page loaded, run this:
+$(document).ready(function (){
+
+	// if we click the full screen button, lets do that
+	$('#viewfullscreen').click(function () { fscreen() });
+
+	// FULLSCREEN code
+	function fscreen(){ 
+		
+		// check if we are fullscreen or not
+			
+			if (window.innerHeight == screen.height) {
+					 var isfullscreen = 1;
+		}
+		
+		// exit Fullscreen
+		if (isfullscreen) {
+			
+			// for explorer, cant automate... so we just say it
+							if (document.exitFullscreen) {
+					document.exitFullscreen();
+				}
+				else if (document.mozCancelFullScreen) {
+					document.mozCancelFullScreen();
+				}
+				else if (document.webkitCancelFullScreen) {
+					document.webkitCancelFullScreen();
+				}
+				
+				$('#fullscreenicon').html('<img src="" alt="" />');
+				$('#fullscreentxt').html('Fullscreen');
+						
+		}
+		// go fullscreen
+		else {
+			
+			// for explorer, cant automate... so we just say it
+							var docElm = document.documentElement;
+				if (docElm.requestFullscreen) {
+				    docElm.requestFullscreen();
+				}
+				else if (docElm.mozRequestFullScreen) {
+				    docElm.mozRequestFullScreen();
+				}
+				else if (docElm.webkitRequestFullScreen) {
+				    docElm.webkitRequestFullScreen();
+				}
+				
+				$('#fullscreenicon').html('<img src="https://amazingtimer.com/images/arrow_in_w.png" alt="" />');
+				$('#fullscreentxt').html('Exit Fullscreen');
+						
+			
+		}
+       
+	}
+
+});
+</script><!-- some custom css -->
+<style type="text/css">
+	.li_countdown{
+		background: #000 url('b36.jpg') no-repeat center center; background-size: 100% auto;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	.li_stopwatch{
+		background: #000 url('b36.jpg') repeat center center; background-size: 100% auto;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	.li_options{
+		background: #000 url('images/bck_9.jpg') repeat center center; background-size: 100% auto;
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: cover;
+	}
+	body{overflow:hidden;}</style>
+
+
+<script>
+
+	/* -------------------------------- GENERAL FUNCTIONS - start -------------------------------------*/
+
+
+	// validate emails
+	function valid_email(email) {
+		var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+		return regex.test(email);
+	}
+
+    // get parameters from url
+    function get_url_parameters(url) {
+        if (!url) {
+            url = window.location.href;
+        }
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&](([^&#]*)|&|#|$)(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+	// ----------------------------------------
+	// merge 2 arrays and remove duplicates
+	function array_merge_unique(array1, array2){
+		var new_array = array1.concat( array2 );
+		return new_array.unique();
+	}
+	Array.prototype.unique = function() {
+		var o = {}, i, l = this.length, r = [];
+		for(i=0; i<l;i+=1) o[this[i]] = this[i];
+		for(i in o) r.push(o[i]);
+		return r;
+	};
+
+
+	// if undefined, return empty
+	function if_undefined_return_empty(variable) {
+		if (typeof variable === "undefined") {
+			variable = '';
+		}
+		return variable;
+	}
+
+
+	// check if number >= 0, if not return 0
+	function must_be_above_zero(number) {
+		if(number < 0){
+			number = 0;
+		}
+		return number;
+	}
+
+
+	// converts a "falsy" value to 0
+	// "falsey" values are: false null undefined 0 "" ( empty string ) NaN ( Not a Number )
+	// http://stackoverflow.com/questions/7540397/convert-nan-to-0-in-javascript
+	function falsy_value_to_zero(str) {
+		str = str ? str : 0;
+		return str;
+	}
+
+
+
+	// ----------------------------------------
+	// same as PHP trim
+	function trim_whitespace(str){
+		str = if_undefined_return_empty(str);
+		return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	}
+
+
+	// add one item. If undefined, then set to 0, then add 1
+	function add_x(qty, this_var) {
+		if(typeof this_var === 'undefined'){
+			this_var = 0;
+		}
+		this_var += parseInt(qty);
+		return this_var;
+	}
+	// safe anti-bot email
+	function __ok(qui){
+		var midd = '@';
+		var sit1 = 'multimonito';
+		var sit2 = 'rcomputer';
+		var fin = 'com';
+		var part1 = 'ma';
+		var part2 = 'il';
+		var ponc = ':';
+		document.write('<a href=\"'+part1+part2+'to'+ponc+qui+midd+sit1+sit2+'.'+fin+'\">'+qui+midd+sit1+sit2+'.'+fin+'</a>');
+	}
+
+</script>
+
+
+</head>
+<body style="">
+
+<div class="main_wrapper">
+
+	<div class="transpbar"></div>
+	<div class="up_bar">
+		
+		<div class="transpbar">
+    <!-- Countdown 	<div class="exportsub">Resto & Bars TV Next Game Countdown + Your Custom Daily Promotions</div> -->
+
+</div>
+
+		
+		<div id="main_up_container">
+			 <!--onclick="ga.push(['_trackEvent', 'menu', 'changepage', 'Stopwatch_page']);"-->
+			<div id="home">Stopwatch</div>
+<!--			<div id="options">Options ></div>-->
+		</div>
+	
+	</div><!-- end up_bar-->
+
+
+
+
+    <div class="title-fade">
+        <h1>Stopwatch</h1>
+        <p>Counts from zero &amp; up. </p>
+        <p>Click the START button under the time when you're ready. Also remember LAPS.</p>
+        <p class="tgp2"><em>PS: this message fades away when you use the stopwatch.</em></p>
+    </div>
+
+
+
+	
+	<div id="slides">
+	
+		<ul class="slides-container">
+		
+			<li class="li_stopwatch">
+			
+				<div class="container centercontainer istable">
+					
+					<div id="stopwatch_timer" class="tablecell">
+						
+						<input type="hidden" name="stimehidden" id="stimehidden" value="0">
+						<div id="stopwatch_time"><div id="swtime">00:00</div><div id="swcsec">.00</div></div>					
+						
+						<div id="stopwatch_buttons_container">
+							
+							<table class="buttonstohide" cellpadding="10" border="0">
+								<tbody><tr>
+									<td width="125">
+										<div class="stop_watch_buttons" id="stopwatch_reset_but">Reset</div>
+									</td>
+									<td width="125">
+										<div class="stop_watch_buttons" id="stopwatch_start_stop_but">Start</div>
+									</td>
+									<td width="125">
+										<div class="stop_watch_buttons" id="stopwatch_save_but">Keep result</div>
+									</td>
+								</tr>
+							</tbody></table>
+
+							<!--<div id="clear_all">Clear All</div>-->
+							
+							<div id="saved_times_container"></div>
+						
+						</div><!-- end stopwatch_buttons_container-->
+					
+					</div><!-- end stopwatch_timer-->
+				
+				</div><!-- end container-->
+				
+			</li>
+			<li class="li_options">
+	 		
+	</div>
+</body></html>
